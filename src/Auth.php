@@ -593,11 +593,11 @@ class Auth {
 		 */
 		JWT::$leeway = 60;
 
-		try {
-			$token = ! empty( $token ) ? JWT::decode( $token, new Key( self::get_secret_key(), 'HS256') ) : null;
-		} catch ( Exception $exception ) {
-			$token = new \WP_Error( 'invalid-secret-key', $exception->getMessage() );
-		}
+        try {
+          $token = ! empty( $token ) ? JWT::decode( $token, self::get_secret_key(),array_keys(JWT::$supported_algs) ) : null;
+        } catch ( Exception $exception ) {
+          $token = new \WP_Error( 'invalid-secret-key', $exception->getMessage() );
+        }
 
 		/**
 		 * If there's no token listed, just bail now before validating an empty token.
